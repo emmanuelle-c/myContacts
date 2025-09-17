@@ -1,0 +1,69 @@
+name: ${APP_NAME}
+services:
+  mongo:
+    image: mongo
+    container_name: ${APP_NAME}_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "${APP_DB_PORT}:${APP_DB_PORT}"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ${APP_NAME}_network
+
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:${APP_DB_PORT}/
+      ME_CONFIG_BASICAUTH_ENABLED: true
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    depends_on:
+      - mongo
+    networks:
+      - ${APP_NAME}_network
+
+  backend:
+    image: backend:latest
+    container_name: "${APP_NAME}_backend"
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:${APP_DB_PORT}/${APP_DB}?authSource=admin
+      - APP_PORT=${APP_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    restart: always
+    networks:
+      - ${APP_NAME}_network
+
+  frontend:
+    image: frontend:latest
+    container_name: "${APP_NAME}_frontend"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - ${APP_NAME}_network
+
+volumes:
+  mongo-data:
+
+networks:
+  myContacts_network:
+    driver: bridge
