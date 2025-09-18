@@ -2,6 +2,7 @@ import { configDotenv } from "dotenv";
 import { connect } from "mongoose";
 import express from "express";
 import userRouter from "./routes/UserRoutes.js";
+import contactRouter from "./routes/ContactRoutes.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
 
@@ -37,6 +38,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Routes API
 app.use("/api/auth", userRouter);
+app.use("/api/contacts", contactRouter);
 
 // Gestion des erreurs globales Express
 app.use((err, req, res, next) => {

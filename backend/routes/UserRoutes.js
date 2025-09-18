@@ -38,6 +38,7 @@ const userRouter = express.Router();
  *   post:
  *     summary: Inscription d'un nouvel utilisateur
  *     description: Inscription d'un nouvel utilisateur avec un email et un mot de passe.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
