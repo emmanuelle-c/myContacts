@@ -1,4 +1,5 @@
 import Contact from "../models/Contact.js";
+import { addContactSchema, updateContactSchema } from "../middlewares/validationSchema.js";
 
 class ContactController {
 
@@ -30,10 +31,13 @@ class ContactController {
 
     async createContact(req, res) {
         try {
+            console.log("Request body:", req.body);
+            console.log("User ID from token:", req.userId);
             const userId = req.userId;
-            const { name, email, phone } = req.body;
+            const { firstname, lastname, phone } = req.body;
 
-            const newContact = new Contact({ userId, name, email, phone });
+            const newContact = new Contact({ firstName: firstname, lastName: lastname, phone: phone, userId: userId });
+            await addContactSchema.validateAsync(newContact);
             await newContact.save();
             res.status(201).json(newContact);
         } catch (error) {
@@ -46,11 +50,13 @@ class ContactController {
         try {
             const userId = req.userId;
             const contactId = req.params.id;
-            const { name, email, phone } = req.body;
+            const { firstname, lastname, phone } = req.body;
+
+            await updateContactSchema.validateAsync(req.body);
 
             const updatedContact = await Contact.findOneAndUpdate(
-                { _id: contactId, userId },
-                { name, email, phone },
+                { _id: contactId, userId: userId },
+                { firstName: firstname, lastName: lastname, phone: phone },
                 { new: true }
             );
 
@@ -58,7 +64,7 @@ class ContactController {
                 return res.status(404).json({ error: "Contact non trouvé" });
             }
 
-            res.json(updatedContact);
+            res.status(203).json(updatedContact);
         } catch (error) {
             res.status(500).json({ error: "Erreur lors de la mise à jour du contact" });
             console.error("Update contact error:", error);

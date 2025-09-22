@@ -33,10 +33,11 @@ const contactRouter = express.Router();
  *           type: string
  *           description: ID de l'utilisateur propriétaire du contact
  *           example: 60d0fe4f5311236168a109cb
- *         _id:
- *           type: string
- *           description: ID unique du contact
- *           example: 60d0fe4f5311236168a109ca
+ *   securitySchemes:
+ *      bearerAuth: 
+ *         type: http
+ *         scheme: bearer
+ *         bearerFormat: JWT
  */
 
 /**
