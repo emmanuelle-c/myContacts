@@ -5,12 +5,21 @@ import userRouter from "./routes/UserRoutes.js";
 import contactRouter from "./routes/ContactRoutes.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
+import cors from "cors";
 
 configDotenv();
 
 const app = express();
 const port = process.env.APP_PORT || 8000;
 const db_url = `${process.env.MONGO_URL}`;
+
+app.use(
+  cors({
+    exposedHeaders: ["Authorization"],
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -33,8 +42,7 @@ app.get("/", (req, res) => {
 });
 
 // documentation Swagger
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Routes API
 app.use("/api/auth", userRouter);

@@ -29,10 +29,25 @@ const contactRouter = express.Router();
  *           type: string
  *           description: Numéro de téléphone du contact
  *           example: +33 6 12 34 56 78
- *         userId:
+ *     UpdateContact:
+ *       type: object
+ *       required:
+ *         - firstname
+ *         - lastname
+ *         - phone
+ *       properties:
+ *         firstname:
  *           type: string
- *           description: ID de l'utilisateur propriétaire du contact
- *           example: 60d0fe4f5311236168a109cb
+ *           description: Prénom du contact
+ *           example: John
+ *         lastname:
+ *           type: string
+ *           description: Nom de famille du contact
+ *           example: Doe
+ *         phone:
+ *           type: string
+ *           description: Numéro de téléphone du contact
+ *           example: +33 6 12 34 56 78
  *   securitySchemes:
  *      bearerAuth: 
  *         type: http

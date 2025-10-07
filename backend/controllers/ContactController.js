@@ -36,8 +36,10 @@ class ContactController {
             const userId = req.userId;
             const { firstname, lastname, phone } = req.body;
 
+            await addContactSchema.validateAsync({ firstName: firstname, lastName: lastname, phone: phone, userId: userId });
+
             const newContact = new Contact({ firstName: firstname, lastName: lastname, phone: phone, userId: userId });
-            await addContactSchema.validateAsync(newContact);
+            
             await newContact.save();
             res.status(201).json(newContact);
         } catch (error) {
