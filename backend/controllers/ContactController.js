@@ -31,15 +31,13 @@ class ContactController {
 
     async createContact(req, res) {
         try {
-            console.log("Request body:", req.body);
-            console.log("User ID from token:", req.userId);
             const userId = req.userId;
             const { firstname, lastname, phone } = req.body;
 
             await addContactSchema.validateAsync({ firstName: firstname, lastName: lastname, phone: phone, userId: userId });
 
             const newContact = new Contact({ firstName: firstname, lastName: lastname, phone: phone, userId: userId });
-            
+
             await newContact.save();
             res.status(201).json(newContact);
         } catch (error) {
@@ -52,16 +50,14 @@ class ContactController {
         try {
             const userId = req.userId;
             const contactId = req.params.id;
-            const { firstname, lastname, phone } = req.body;
+            const { firstName, lastName, phone } = req.body;
 
-            await updateContactSchema.validateAsync(req.body);
-
+            await updateContactSchema.validateAsync({ firstName, lastName, phone });
             const updatedContact = await Contact.findOneAndUpdate(
                 { _id: contactId, userId: userId },
-                { firstName: firstname, lastName: lastname, phone: phone },
+                { firstName, lastName, phone },
                 { new: true }
             );
-
             if (!updatedContact) {
                 return res.status(404).json({ error: "Contact non trouvé" });
             }

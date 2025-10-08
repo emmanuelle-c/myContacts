@@ -1,5 +1,6 @@
 import { useEffect, useState, type JSX } from "react";
 import ContactCard from "../components/ContactCard";
+import { useAuth } from "../context/useAuth";
 
 export interface Contact {
     firstName: string;
@@ -10,24 +11,25 @@ export interface Contact {
 
 export default function Contact(): JSX.Element {
 
-    const email = localStorage.getItem("email");
-    const token = localStorage.getItem("token");
     const [contacts, setContacts] = useState<Contact[]>([]);
-
+    const { auth } = useAuth();
     useEffect(() => {
-        try {
-            fetch(`${import.meta.env.VITE_API_URL}/contacts`, {
-                credentials: "include",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-            })
-                .then(res => res.json())
-                .then(data => setContacts(data));
-        } catch (error) {
-            console.error("Erreur lors de la récupération des contacts :", error);
-        }
-    }, [token, contacts]);
+        const fetchContacts = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/contacts`, {
+                    credentials: "include",
+                    headers: {
+                        "Authorization": `Bearer ${auth.token}`,
+                    },
+                });
+                const data = await response.json();
+                setContacts(data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des contacts :", error);
+            }
+        };
+        fetchContacts();
+    }, [contacts.length, auth.token]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -41,15 +43,18 @@ export default function Contact(): JSX.Element {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${auth.token}`,
                 },
                 body: JSON.stringify({ firstname: firstName, lastname: lastName, phone: phone }),
                 credentials: "include",
             })
                 .then(res => res.json())
                 .then(data => setContacts([...contacts, data]));
+
         } catch (error) {
             console.error("Erreur lors de l'ajout du contact :", error);
+        } finally {
+            e.currentTarget.reset();
         }
     };
 
@@ -58,7 +63,7 @@ export default function Contact(): JSX.Element {
             fetch(`${import.meta.env.VITE_API_URL}/contacts/${id}`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${auth.token}`,
                 },
                 credentials: "include",
             })
@@ -73,11 +78,11 @@ export default function Contact(): JSX.Element {
 
     return (
         <div className="Contact">
-            <h1>Bonjour {email}</h1>
+            <h1>Bonjour {auth.email}</h1>
             <section>
                 <h2>Voici la liste de vos contacts :</h2>
-                {contacts && contacts.map((contact: Contact, id: number) => (
-                    <ContactCard key={id} contact={contact} handleDelete={handleDelete} />
+                {Array.isArray(contacts) && contacts.map((contact: Contact, id: number) => (
+                    <ContactCard key={id} contact={contact} handleDelete={handleDelete} setContacts={setContacts} />
                 ))}
             </section>
             <section>

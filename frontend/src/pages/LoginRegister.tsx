@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css"
 import React from "react";
+import { useAuth } from "../context/useAuth";
 
 export default function LoginRegister(): JSX.Element {
-  const [isLogin, setIsLogin] = useState(true);
+  const { setAuth } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
   const email = React.useRef<HTMLInputElement>(null);
   const password = React.useRef<HTMLInputElement>(null);
@@ -70,13 +72,13 @@ export default function LoginRegister(): JSX.Element {
       });
 
       if (result?.ok) {
-        navigate("/contacts");
         const data = await result.json();
-        console.log(data);
+        setAuth({ isLogged: true, userId: data.userId, token: data.token, email: data.email });
         localStorage.setItem("token", data.token);
-        localStorage.setItem("email", email.current?.value || data.email);
-        localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userId", data.userId);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("isLogged", "true");
+        navigate("/contacts");
       } else {
         const data = await result.json();
         setErrors({ message: data.error || "Erreur lors de la connexion" });
@@ -128,10 +130,10 @@ export default function LoginRegister(): JSX.Element {
   return (
     <main id="login-register-page">
       <div id="button-container">
-        <button id="show-login" onClick={() => setIsLogin(true)}>Se connecter</button>
-        <button id="show-register" onClick={() => setIsLogin(false)}>S'inscrire</button>
+        <button id="show-login" onClick={() => setIsLoggedIn(true)}>Se connecter</button>
+        <button id="show-register" onClick={() => setIsLoggedIn(false)}>S'inscrire</button>
       </div>
-      {isLogin ?
+      {isLoggedIn ?
         (<form id="login-form" onSubmit={(e) => handleLogin(e)}>
           <label htmlFor="email">Email:</label>
           <input type="email" id="email" name="email" ref={email} required />

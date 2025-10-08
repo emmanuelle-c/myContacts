@@ -3,7 +3,7 @@ import App from "./App";
 import HomePage from "./pages/HomePage";
 import LoginRegister from "./pages/LoginRegister";
 import Contact from "./pages/Contact";
-
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +21,11 @@ const router = createBrowserRouter([
       },
       {
         path: "contacts",
-        element: <Contact />,
+        element: (
+          <ProtectedRoute>
+            <Contact />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

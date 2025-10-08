@@ -15,7 +15,7 @@ export const updateContactSchema = joi.object({
     firstName: joi.string().min(3).max(50).optional(),
     lastName: joi.string().min(3).max(50).optional(),
     phone: joi.string().pattern(/^[0-9+\-\s()]*$/).min(10).max(20).optional(),
-}).or('firstname', 'lastname', 'phone');
+});
 
 // Schéma de validation pour l'ajout d'un user
 export const registerUserSchema = joi.object({

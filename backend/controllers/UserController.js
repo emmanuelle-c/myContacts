@@ -55,6 +55,29 @@ class UserController {
             console.error("Login error:", error);
         }
     }
+
+    async checkToken(req, res) {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "Token manquant" });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: "Token manquant" });
+        }
+
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const user = await User.findById(decoded.userId);
+            if (!user) {
+                return res.status(401).json({ error: "Utilisateur non trouvé" });
+            }
+            res.json({ userId: user.id, email: user.email, token });
+        } catch (error) {
+            res.status(401).json({ error: "Token invalide" });
+        }
+    }
 }
 
 export default UserController;

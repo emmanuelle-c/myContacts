@@ -79,4 +79,6 @@ userRouter.post("/register", (req, res) => userController.register(req, res));
 userRouter.post("/login", (req, res) => userController.login(req, res));
 
 
+userRouter.get("/check", (req, res) => userController.checkToken(req, res));
+
 export default userRouter;

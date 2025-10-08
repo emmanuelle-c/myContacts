@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import ReactSvg from "./ReactSvg";
+import { useAuth } from "../context/useAuth";
+
 
 export default function Header() {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
+    const { auth, setAuth } = useAuth();
+    const isLogged = auth.isLogged;
     const handleLogout = () => {
-        localStorage.removeItem("isLoggedIn");
+        setAuth({ isLogged: false, userId: null, token: null, email: null });
         localStorage.removeItem("token");
-        localStorage.removeItem("email");
         localStorage.removeItem("userId");
+        localStorage.removeItem("email");
+        localStorage.setItem("isLogged", "false");
         window.location.href = "/";
     }
     return (
@@ -19,7 +22,7 @@ export default function Header() {
                     <Link to="/">Accueil</Link>
                 </li>
                 <li>
-                    {isLoggedIn === "true" ?
+                    {isLogged === true ?
                     <>
                         <Link to="/contacts">Contacts</Link>
                         <button onClick={handleLogout}>Déconnexion</button>
