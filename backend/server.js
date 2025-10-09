@@ -11,7 +11,7 @@ async function startServer() {
   try {
     await connect(db_url);
     console.log("Connexion à MongoDB réussie !");
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
       console.log(`🚀 Serveur démarré sur le port ${port}`);
     });
   } catch (error) {

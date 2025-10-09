@@ -8,5 +8,10 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
-  }
+  },
+ preview: {
+   allowedHosts: ['mycontacts.emmanuelle-curiant.fr'],
+   host: '0.0.0.0',
+   port: 5173,
+ },
 })

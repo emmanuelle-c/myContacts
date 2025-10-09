@@ -4,12 +4,18 @@ import userRouter from "./routes/UserRoutes.js";
 import contactRouter from "./routes/ContactRoutes.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
+import cors from "cors";
 
 configDotenv();
 
 const app = express();
 
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://mycontacts.emmanuelle-curiant.fr:5173",
+  credentials: true
+}));
 
 // Route de test
 app.get("/", (req, res) => {
