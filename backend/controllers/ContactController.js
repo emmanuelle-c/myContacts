@@ -77,7 +77,7 @@ class ContactController {
             if (!deletedContact) {
                 return res.status(404).json({ error: "Contact non trouvé" });
             }
-            res.json({ message: "Contact supprimé avec succès" });
+            res.status(200).json({ message: "Contact supprimé avec succès" });
         } catch (error) {
             res.status(500).json({ error: "Erreur lors de la suppression du contact" });
             console.error("Delete contact error:", error);

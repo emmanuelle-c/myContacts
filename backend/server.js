@@ -1,27 +1,11 @@
 import { configDotenv } from "dotenv";
 import { connect } from "mongoose";
-import express from "express";
-import userRouter from "./routes/UserRoutes.js";
-import contactRouter from "./routes/ContactRoutes.js";
-import swaggerUI from "swagger-ui-express";
-import swaggerSpec from "./swagger.js";
-import cors from "cors";
+import app from "./app.js";
 
 configDotenv();
 
-const app = express();
 const port = process.env.APP_PORT || 8000;
 const db_url = `${process.env.MONGO_URL}`;
-
-app.use(
-  cors({
-    exposedHeaders: ["Authorization"],
-    origin: ["http://localhost:5173"],
-    credentials: true,
-  })
-);
-
-app.use(express.json());
 
 async function startServer() {
   try {
@@ -35,23 +19,5 @@ async function startServer() {
     process.exit(1);
   }
 }
-
-// Route de test
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-// documentation Swagger
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-
-// Routes API
-app.use("/api/auth", userRouter);
-app.use("/api/contacts", contactRouter);
-
-// Gestion des erreurs globales Express
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Erreur interne du serveur" });
-});
 
 startServer();

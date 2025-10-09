@@ -78,7 +78,27 @@ userRouter.post("/register", (req, res) => userController.register(req, res));
  */
 userRouter.post("/login", (req, res) => userController.login(req, res));
 
-
+/**
+ * @swagger
+ * /api/auth/check:
+ *   get:
+ *     summary: Vérifie la validité du token JWT
+ *     description: Vérifie si le token JWT fourni dans l'en-tête Authorization est valide.
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Token JWT à vérifier
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
+ *     responses:
+ *       200:
+ *         description: retourne les informations de l'utilisateur
+ *       401:
+ *         description: Token invalide
+ */
 userRouter.get("/check", (req, res) => userController.checkToken(req, res));
 
 export default userRouter;
