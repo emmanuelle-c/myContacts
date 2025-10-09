@@ -13,6 +13,7 @@ Application Fullstack de gestion de contacts (Node.js/Express/MongoDB + React + 
 - [API Endpoints](#api-endpoints)
 - [Utilisation avec Docker](#utilisation-avec-docker)
 - [Structure du projet](#structure-du-projet)
+- [URLs du site déployé](#urls-du-site-déployé)
 
 ---
 
@@ -38,7 +39,7 @@ Application Fullstack de gestion de contacts (Node.js/Express/MongoDB + React + 
 ### 1. Cloner le repo
 
 ```bash
-git clone <url-du-repo>
+git clone git@github.com:emmanuelle-c/myContacts.git
 cd myContacts
 ```
 
@@ -189,9 +190,16 @@ myContacts/
 
 ---
 
+## URLs du site déployé
+
+- Frontend : http://mycontacts.emmanuelle-curiant.fr:5173/
+- Backend : http://mycontacts.emmanuelle-curiant.fr:8000/
+
+---
+
 ## Remarques
 
-- Swagger/OpenAPI disponible sur `/api/docs` (si activé dans le backend).
+- Swagger/OpenAPI disponible sur `/api/docs`.
 
 ---
 
