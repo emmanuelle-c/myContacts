@@ -16,8 +16,15 @@
     width: 20%;
     display: flex;
     list-style: none;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: center;
+    #nav-logged-out {
+      width: 112%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
   }
+}
 }
 
 #login-register-page {

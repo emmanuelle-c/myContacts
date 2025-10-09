@@ -23,10 +23,10 @@ export default function Header() {
                 </li>
                 <li>
                     {isLogged === true ?
-                    <>
+                    <div id="nav-logged-out">
                         <Link to="/contacts">Contacts</Link>
                         <button onClick={handleLogout}>Déconnexion</button>
-                    </>
+                    </div>
                         :
                         <Link to="/login">Connexion/Inscription</Link>
                      }
