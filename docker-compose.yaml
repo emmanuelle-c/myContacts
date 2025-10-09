@@ -39,6 +39,7 @@ services:
       - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:${APP_DB_PORT}/${APP_DB}?authSource=admin
       - APP_PORT=${APP_PORT}
       - JWT_SECRET=${JWT_SECRET}
+      - URL_FRONTEND=${URL_FRONTEND}
     ports:
       - "8000:8000"
     depends_on:
@@ -53,6 +54,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
     environment:
       - VITE_API_URL=${VITE_API_URL}
     ports:

@@ -7,13 +7,14 @@ import swaggerSpec from "./swagger.js";
 import cors from "cors";
 
 configDotenv();
+const url_frontend = `${process.env.URL_FRONTEND}`;
 
 const app = express();
 
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://mycontacts.emmanuelle-curiant.fr:5173",
+  origin: url_frontend,
   credentials: true
 }));
 
